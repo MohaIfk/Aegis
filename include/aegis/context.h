@@ -80,7 +80,7 @@ namespace aegis {
      * @note This is for internal use by other Aegis classes (Stream, Buffer)
      * so they can call their backend counterparts.
      */
-    internal::IComputeBackend* GetBackend() { return m_backend.get(); }
+    internal::IComputeBackend* GetBackend() const { return m_backend.get(); }
 
   private:
     /**

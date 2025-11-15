@@ -7,6 +7,8 @@
 #include <string>
 #include <memory> // for std::unique_ptr
 
+#include "aegis/buffer.h"
+
 namespace aegis {
   class ComputeStream;
   class GpuBuffer;
@@ -56,7 +58,7 @@ namespace aegis {
         size_t byteSize,
         // TODO: define this enum in a common header
         // For now, i will assume 0 = DEVICE_LOCAL, 1 = UPLOAD, 2 = READBACK
-        int memoryType
+        GpuBuffer::MemoryType memoryType
     );
 
     /**

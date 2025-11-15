@@ -1,7 +1,6 @@
 #include "aegis/context.h"
 
 #include "aegis/stream.h"
-#include "aegis/buffer.h"
 #include "aegis/kernel.h"
 #include "aegis/event.h"
 
@@ -55,11 +54,17 @@ namespace aegis {
     return nullptr;
   }
 
-  std::unique_ptr<GpuBuffer> ComputeContext::CreateBuffer(size_t byteSize, int memoryType) {
-    // This is a placeholder for the logic to convert the public
-    // memoryType enum to the internal GpuMemoryType enum.
-    auto backendMemType = (internal::GpuMemoryType)memoryType;
-    return nullptr; // Placeholder
+  std::unique_ptr<GpuBuffer> ComputeContext::CreateBuffer(size_t byteSize, GpuBuffer::MemoryType memoryType) {
+    internal::GpuMemoryType backendMemType;
+    switch (memoryType) {
+      case GpuBuffer::MemoryType::UPLOAD: backendMemType = internal::GpuMemoryType::UPLOAD; break;
+      case GpuBuffer::MemoryType::READBACK: backendMemType = internal::GpuMemoryType::READBACK; break;
+      default: backendMemType = internal::GpuMemoryType::DEVICE_LOCAL; break;
+    }
+
+    auto backendBuffer = m_backend->CreateBuffer(byteSize, backendMemType);
+    if (!backendBuffer) return nullptr;
+    return std::unique_ptr<GpuBuffer>(new GpuBuffer(this, std::move(backendBuffer)));
   }
 
   std::unique_ptr<ComputeKernel> ComputeContext::CreateKernel(const std::string &hlslFilePath,

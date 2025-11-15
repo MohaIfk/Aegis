@@ -12,7 +12,7 @@
 
 // #include "d3d12_stream.h"
 // #include "d3d12_event.h"
-// #include "d3d12_buffer.h"
+#include "d3d12_buffer.h"
 // #include "d3d12_kernel.h"
 
 namespace aegis::internal {

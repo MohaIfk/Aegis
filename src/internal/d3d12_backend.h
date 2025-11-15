@@ -1,7 +1,8 @@
 #pragma once
-#include "backend.h"
 
 #if defined(AEGIS_ENABLE_D3D12)
+
+#include "backend.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <d3d12.h>

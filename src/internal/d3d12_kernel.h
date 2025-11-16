@@ -12,12 +12,12 @@ using Microsoft::WRL::ComPtr;
 
 namespace aegis::internal {
   /**
- * @brief The D3D12 implementation of a compute kernel.
- *
- * This class wraps an ID3D12RootSignature and an ID3D12PipelineState.
- * Its creation is the most complex part of the D3D12 backend,
- * involving shader compilation and reflection.
- */
+   * @brief The D3D12 implementation of a compute kernel.
+   *
+   * This class wraps an ID3D12RootSignature and an ID3D12PipelineState.
+   * Its creation is the most complex part of the D3D12 backend,
+   * involving shader compilation and reflection.
+   */
   class D3D12Kernel: public IComputeKernel {
   public:
     virtual ~D3D12Kernel();

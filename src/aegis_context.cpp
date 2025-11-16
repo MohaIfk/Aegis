@@ -48,8 +48,11 @@ namespace aegis {
   }
 
   std::unique_ptr<ComputeEvent> ComputeContext::CreateEvent() {
-    // The same thing here also.
-    return nullptr;
+    auto backendEvent = m_backend->CreateEvent();
+    if (!backendEvent) return nullptr;
+    return std::unique_ptr<ComputeEvent>(
+        new ComputeEvent(this, std::move(backendEvent))
+    );
   }
 
   std::unique_ptr<GpuBuffer> ComputeContext::CreateBuffer(size_t byteSize, GpuBuffer::MemoryType memoryType) {

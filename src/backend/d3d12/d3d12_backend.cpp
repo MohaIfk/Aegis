@@ -11,9 +11,9 @@
 #undef CreateEvent
 
 // #include "d3d12_stream.h"
-// #include "d3d12_event.h"
 #include "d3d12_buffer.h"
-#include "d3d12_kernel.h"s
+#include "d3d12_kernel.h"
+#include "d3d12_event.h"
 
 namespace aegis::internal {
   std::unique_ptr<D3D12Backend> D3D12Backend::Create() {

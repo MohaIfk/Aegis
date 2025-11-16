@@ -26,13 +26,13 @@ namespace aegis {
     /**
      * @brief Destroys the compute kernel.
      */
-    ~ComputeKernel();
+    ~ComputeKernel() = default;
 
     /**
      * @brief Gets the internal backend implementation.
      * @note For internal use by other Flux classes.
      */
-    internal::IComputeKernel* GetBackendKernel() { return m_backendKernel.get(); }
+    internal::IComputeKernel* GetBackendKernel() const { return m_backendKernel.get(); }
   private:
     friend class ComputeContext;
 

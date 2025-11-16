@@ -15,8 +15,6 @@
 
 #include <stdexcept> // for std::runtime_error
 
-#include "aegis/context.h"
-
 namespace aegis {
   ComputeContext::ComputeContext(std::unique_ptr<internal::IComputeBackend> backend) : m_backend(std::move(backend)) {}
 
@@ -67,9 +65,9 @@ namespace aegis {
     return std::unique_ptr<GpuBuffer>(new GpuBuffer(this, std::move(backendBuffer)));
   }
 
-  std::unique_ptr<ComputeKernel> ComputeContext::CreateKernel(const std::string &hlslFilePath,
-                                                              const std::string &entryPoint) {
-    return nullptr; // Placeholder
+  std::unique_ptr<ComputeKernel> ComputeContext::CreateKernel(const std::string &hlslFilePath, const std::string &entryPoint) {
+    auto backendBuffer = m_backend->CreateKernel(hlslFilePath, entryPoint);
+    return std::make_unique<ComputeKernel>(this, std::move(backendBuffer));
   }
 
   void ComputeContext::WaitForIdle() { m_backend->WaitForIdle(); }

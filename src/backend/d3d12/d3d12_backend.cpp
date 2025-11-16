@@ -13,7 +13,7 @@
 // #include "d3d12_stream.h"
 // #include "d3d12_event.h"
 #include "d3d12_buffer.h"
-// #include "d3d12_kernel.h"
+#include "d3d12_kernel.h"s
 
 namespace aegis::internal {
   std::unique_ptr<D3D12Backend> D3D12Backend::Create() {
@@ -121,7 +121,7 @@ namespace aegis::internal {
 
   std::unique_ptr<IComputeKernel> D3D12Backend::CreateKernel(const std::string& hlslFilePath, const std::string& entryPoint) {
     try {
-      return D3D12Kernel::create(this, hlslFilePath, entryPoint);
+      return D3D12Kernel::Create(this, hlslFilePath, entryPoint);
     } catch (const std::exception& e) {
       // TODO: log this error like "shader compilation failed".
       return nullptr;

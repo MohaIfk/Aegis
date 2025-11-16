@@ -8,6 +8,7 @@
 #include <memory> // for std::unique_ptr
 
 #include "aegis/buffer.h"
+#include "aegis/kernel.h"
 
 namespace aegis {
   class ComputeStream;

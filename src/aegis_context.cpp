@@ -42,9 +42,9 @@ namespace aegis {
   }
 
   std::unique_ptr<ComputeStream> ComputeContext::CreateStream() {
-    // We will only call the backend implementation CreateStream,
-    // wrap it and return it, placeholder for now.
-    return nullptr;
+    auto backendStream = m_backend->CreateStream();
+    if (!backendStream) return nullptr;
+    return std::unique_ptr<ComputeStream>(new ComputeStream(this, std::move(backendStream)));
   }
 
   std::unique_ptr<ComputeEvent> ComputeContext::CreateEvent() {

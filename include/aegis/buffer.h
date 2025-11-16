@@ -25,7 +25,7 @@ namespace aegis {
     /**
      * @brief Destroys the GPU buffer.
      */
-    ~GpuBuffer();
+    ~GpuBuffer() = default;
 
     /**
      * @brief Gets the size of the buffer in bytes.

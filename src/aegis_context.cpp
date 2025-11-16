@@ -70,7 +70,7 @@ namespace aegis {
 
   std::unique_ptr<ComputeKernel> ComputeContext::CreateKernel(const std::string &hlslFilePath, const std::string &entryPoint) {
     auto backendBuffer = m_backend->CreateKernel(hlslFilePath, entryPoint);
-    return std::make_unique<ComputeKernel>(this, std::move(backendBuffer));
+    return std::unique_ptr<ComputeKernel>(new ComputeKernel(this, std::move(backendBuffer)));
   }
 
   void ComputeContext::WaitForIdle() { m_backend->WaitForIdle(); }

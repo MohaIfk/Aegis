@@ -63,7 +63,7 @@ namespace aegis::internal {
       ));
 
       D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-      queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
+      queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
       queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
       ThrowIfFailed(m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_masterCommandQueue)));
 

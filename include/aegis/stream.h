@@ -34,13 +34,18 @@ namespace aegis {
     ~ComputeStream();
 
     /**
+     * @brief Binds a compute kernel to the stream for the next dispatch.
+     * @param kernel The kernel to set.
+     */
+    void SetKernel(ComputeKernel& kernel);
+
+    /**
      * @brief Records a command to dispatch a compute kernel.
-     * @param kernel The kernel to run.
      * @param threadGroupsX Number of thread groups in the X dimension.
      * @param threadGroupsY Number of thread groups in the Y dimension.
      * @param threadGroupsZ Number of thread groups in the Z dimension.
      */
-    void RecordDispatch(ComputeKernel& kernel, uint32_t threadGroupsX, uint32_t threadGroupsY, uint32_t threadGroupsZ);
+    void RecordDispatch(uint32_t threadGroupsX, uint32_t threadGroupsY, uint32_t threadGroupsZ);
 
     /**
      * @brief Records a command to copy data from one GPU buffer to another.

@@ -9,9 +9,11 @@ namespace aegis {
 
   ComputeStream::~ComputeStream() = default;
 
-  void ComputeStream::RecordDispatch(ComputeKernel &kernel, uint32_t threadGroupsX, uint32_t threadGroupsY,
-                                     uint32_t threadGroupsZ) {
+  void ComputeStream::SetKernel(ComputeKernel &kernel) {
     m_backendStream->SetKernel(kernel.GetBackendKernel());
+  }
+
+  void ComputeStream::RecordDispatch(uint32_t threadGroupsX, uint32_t threadGroupsY, uint32_t threadGroupsZ) {
     m_backendStream->RecordDispatch(threadGroupsX, threadGroupsY, threadGroupsZ);
   }
 

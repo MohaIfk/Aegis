@@ -19,6 +19,15 @@ namespace aegis::internal {
   class D3D12Kernel;
 
   /**
+   * @brief Holds information for a pending GPU-to-CPU data transfer.
+   */
+  struct PendingReadback {
+    IGpuBuffer* readbackBuffer;
+    const void* cpuDestination;
+    size_t      byteSize;
+  };
+
+  /**
    * @brief The D3D12 implementation of a compute stream.
    *
    * This class wraps an ID3D12GraphicsCommandList, ID3D12CommandAllocator,
@@ -82,6 +91,7 @@ namespace aegis::internal {
 
     std::vector<D3D12_RESOURCE_BARRIER> m_pendingBarriers;
     std::vector<std::unique_ptr<IGpuBuffer>> m_inFlightResources;
+    std::queue<PendingReadback> m_pendingReadbacks;
 
     // TODO: Need pools for upload and readback buffers
   };

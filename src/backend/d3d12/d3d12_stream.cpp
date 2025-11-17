@@ -26,7 +26,6 @@ namespace aegis::internal {
   }
 
   D3D12Stream::~D3D12Stream() {
-    HostWait();
     CloseHandle(m_fenceEvent);
   }
 
@@ -134,9 +133,16 @@ namespace aegis::internal {
 
     m_fenceValue++;
 
-    m_inFlightResources.clear();
+    while (!m_pendingReadbacks.empty()) {
+      auto readback = m_pendingReadbacks.front();
+      m_pendingReadbacks.pop();
 
-    // TODO: This is where we would process completed readbacks
+      void* pGpuData = readback.readbackBuffer->Map();
+      memcpy(const_cast<void *>(readback.cpuDestination), pGpuData, readback.byteSize);
+      readback.readbackBuffer->Unmap();
+    }
+
+    m_inFlightResources.clear();
   }
 
   void D3D12Stream::StreamWait(IComputeEvent *event) {
@@ -182,9 +188,8 @@ namespace aegis::internal {
     D3D12Buffer* d3dReadbackBuffer = static_cast<D3D12Buffer*>(tempReadbackBuffer.get());
 
     ResourceCopyBuffer(d3dReadbackBuffer, src);
-    // TODO: Need to queue this readback.
-    // When HostWait() is called, we must map this buffer,
-    // copy to destData, and then unmap
+
+    m_pendingReadbacks.push({tempReadbackBuffer.get(), destData, byteSize});
 
     m_inFlightResources.push_back(std::move(tempReadbackBuffer));
   }

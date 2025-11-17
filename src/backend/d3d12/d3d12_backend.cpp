@@ -28,10 +28,10 @@ namespace aegis::internal {
   D3D12Backend::D3D12Backend() : m_masterFenceValue(0), m_fenceEvent(nullptr) {}
 
   D3D12Backend::~D3D12Backend() {
-    if (m_masterCommandQueue) {
+    /*if (m_masterCommandQueue) {
       // Wait for all final commands to finish before releasing resources
       WaitForIdle();
-    }
+    }*/
     if (m_fenceEvent) {
       CloseHandle(m_fenceEvent);
     }
@@ -62,10 +62,10 @@ namespace aegis::internal {
           IID_PPV_ARGS(&m_device)
       ));
 
-      D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+      /*D3D12_COMMAND_QUEUE_DESC queueDesc = {};
       queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
       queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-      ThrowIfFailed(m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_masterCommandQueue)));
+      ThrowIfFailed(m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_masterCommandQueue)));*/
 
       ThrowIfFailed(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_masterFence)));
       m_masterFenceValue = 1;
@@ -132,7 +132,7 @@ namespace aegis::internal {
 
   void D3D12Backend::WaitForIdle() {
     // Stop the world
-    std::lock_guard<std::mutex> queueLock(m_queueMutex);
+    /*std::lock_guard<std::mutex> queueLock(m_queueMutex);
     std::lock_guard<std::mutex> lock(m_fenceMutex);
 
     const UINT64 fenceValueToSignal = m_masterFenceValue;
@@ -142,7 +142,7 @@ namespace aegis::internal {
     if (m_masterFence->GetCompletedValue() < fenceValueToSignal) {
       ThrowIfFailed(m_masterFence->SetEventOnCompletion(fenceValueToSignal, m_fenceEvent));
       WaitForSingleObjectEx(m_fenceEvent, INFINITE, FALSE);
-    }
+    }*/
   }
 }
 

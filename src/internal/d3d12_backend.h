@@ -54,13 +54,13 @@ namespace aegis::internal {
 
     // I will make those public so other backend classes can use them (D3D12Stream, etc.)
     ID3D12Device5* GetDevice() { return m_device.Get(); }
-    ID3D12CommandQueue* GetMasterQueue() { return m_masterCommandQueue.Get(); }
+    //ID3D12CommandQueue* GetMasterQueue() { return m_masterCommandQueue.Get(); }
     IDxcCompiler3* GetCompiler() { return m_dxcCompiler.Get(); }
     IDxcUtils* GetUtils() { return m_dxcUtils.Get(); }
     IDxcIncludeHandler* GetIncludeHandler() { return m_dxcIncludeHandler.Get(); }
 
     /** @brief Provides thread-safe access to the master command queue. */
-    std::mutex& GetQueueMutex() { return m_queueMutex; }
+    //std::mutex& GetQueueMutex() { return m_queueMutex; }
 
   private:
     /**
@@ -82,7 +82,7 @@ namespace aegis::internal {
     // Core D3D12 Objects
     ComPtr<IDXGIFactory4> m_dxgiFactory;
     ComPtr<ID3D12Device5> m_device;
-    ComPtr<ID3D12CommandQueue> m_masterCommandQueue;
+    //ComPtr<ID3D12CommandQueue> m_masterCommandQueue;
 
     // DXC (Compiler) Objects
     ComPtr<IDxcUtils> m_dxcUtils;
@@ -95,7 +95,7 @@ namespace aegis::internal {
     HANDLE m_fenceEvent;
 
     std::mutex m_fenceMutex; // Protects m_masterFence and m_masterFenceValue
-    std::mutex m_queueMutex; // Protects m_masterCommandQueue submission
+    // std::mutex m_queueMutex; // Protects m_masterCommandQueue submission
   };
 }
 

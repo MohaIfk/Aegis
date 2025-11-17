@@ -7,6 +7,7 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 #include <cstdint>
+#include <atomic>
 
 using Microsoft::WRL::ComPtr;
 
@@ -28,8 +29,11 @@ namespace aegis::internal {
 
     ID3D12Fence* GetFence() { return m_fence.Get(); }
   private:
+    friend class D3D12Stream;
+
     D3D12Backend* m_backend;
     ComPtr<ID3D12Fence> m_fence;
+    std::atomic<UINT64> m_fenceValue;
   };
 }
 

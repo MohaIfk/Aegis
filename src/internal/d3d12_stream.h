@@ -81,6 +81,7 @@ namespace aegis::internal {
     D3D12Backend* m_backend;
     ComPtr<ID3D12CommandAllocator> m_commandAllocator;
     ComPtr<ID3D12GraphicsCommandList4> m_commandList;
+    ComPtr<ID3D12CommandQueue> m_queue;
 
     ComPtr<ID3D12Fence> m_fence;
     UINT64 m_fenceValue;

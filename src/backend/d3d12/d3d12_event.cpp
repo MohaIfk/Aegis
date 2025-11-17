@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 namespace aegis::internal {
-   D3D12Event::D3D12Event(D3D12Backend *backend) : m_backend(backend) {
+   D3D12Event::D3D12Event(D3D12Backend *backend) : m_backend(backend), m_fenceValue(0) {
      auto device = backend->GetDevice();
      ThrowIfFailed(device->CreateFence(
         0, // Initial value

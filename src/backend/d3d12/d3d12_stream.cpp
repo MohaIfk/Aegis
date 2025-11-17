@@ -16,6 +16,11 @@ namespace aegis::internal {
     ThrowIfFailed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator.Get(), nullptr, IID_PPV_ARGS(&m_commandList)));
     m_commandList->Close();
 
+    D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+    queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+    queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+    ThrowIfFailed(device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_queue)));
+
     ThrowIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
     m_fenceValue = 1;
 
@@ -117,8 +122,7 @@ namespace aegis::internal {
 
     ID3D12CommandList* const ppCommandLists[] = { m_commandList.Get() };
 
-    auto queue = m_backend->GetMasterQueue();
-    std::lock_guard<std::mutex> lock(m_backend->GetQueueMutex());
+    auto queue = m_queue.Get();
 
     queue->ExecuteCommandLists(1, ppCommandLists);
 
@@ -146,24 +150,21 @@ namespace aegis::internal {
   }
 
   void D3D12Stream::StreamWait(IComputeEvent *event) {
-    resetCommandList();
     D3D12Event* d3dEvent = static_cast<D3D12Event*>(event);
+    ID3D12Fence* fence = d3dEvent->GetFence();
 
-    // TODO: this is only a simplified version
-    auto queue = m_backend->GetMasterQueue();
-    std::lock_guard<std::mutex> lock(m_backend->GetQueueMutex());
+    UINT64 valueToWaitFor = d3dEvent->m_fenceValue.load();
 
-    ThrowIfFailed(queue->Wait(d3dEvent->GetFence(), 1)); // We assumes fence value is 1
+    ThrowIfFailed(m_queue->Wait(fence, valueToWaitFor));
   }
 
   void D3D12Stream::RecordEvent(IComputeEvent *event) {
-    resetCommandList();
     D3D12Event* d3dEvent = static_cast<D3D12Event*>(event);
+    ID3D12Fence* fence = d3dEvent->GetFence();
 
-    // A simplified version:
-    auto queue = m_backend->GetMasterQueue();
-    std::lock_guard<std::mutex> lock(m_backend->GetQueueMutex());
-    ThrowIfFailed(queue->Signal(d3dEvent->GetFence(), 1)); // We assumes value 1
+    UINT64 valueToSignal = ++(d3dEvent->m_fenceValue);
+
+    ThrowIfFailed(m_queue->Signal(fence, valueToSignal));
   }
 
   // TODO: Add a pool of upload/readback buffers.

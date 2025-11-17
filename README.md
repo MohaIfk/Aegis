@@ -25,6 +25,7 @@ It's still early, but the core architecture is alive!
 - [x] `RecordUpload` and `RecordDownload` get data to and from the GPU.
 - [x] `SetKernel`, `SetBuffer`, and `RecordDispatch` run your code.
 - [x] `HostWait` actually waits for the GPU and copies the data back!
+- [x] Real Async! `StreamWait` and `RecordEvent` are now fully implemented with `ID3D12Fences`. You can properly synchronize work between multiple streams.
 
 # Look! It's Working!
 
@@ -113,6 +114,5 @@ This is just the beginning. There's a lot of stuff that's super inefficient and 
 - [ ] **Vulkan Backend**: This is the big one. The whole design was for a pluggable backend, so I really want to add a Vulkan backend to make this cross-platform.
 - [ ] **Upload Heaps**: `RecordUpload` and `RecordDownload` create a new temp buffer every single time. This is terrible for performance. I need to build a proper ring-buffer or upload heap.
 - [ ] **Descriptor Heaps**: The root signature part is a simple hack that only supports root UAVs. This is not how you're supposed to do it. It needs to use real descriptor heaps to support hundreds of resources, constant buffers (CBVs), SRVs, etc.
-- [ ] **Real Async**: `StreamWait` and `RecordEvent` are just stubs. They need to be implemented with `ID3D12Fences` to allow for real async stream-to-stream synchronization.
 
 *Anyway, that's it for now. I'm just happy it's not crashing anymore.*

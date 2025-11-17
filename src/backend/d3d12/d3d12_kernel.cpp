@@ -92,7 +92,6 @@ namespace aegis::internal {
      D3D12_SHADER_DESC shaderDesc;
      reflection->GetDesc(&shaderDesc);
 
-     std::vector<std::vector<D3D12_DESCRIPTOR_RANGE1>> rangesPerParam;
      std::vector<D3D12_ROOT_PARAMETER1> rootParameters;
 
      for (UINT i = 0; i < shaderDesc.BoundResources; ++i) {
@@ -108,37 +107,22 @@ namespace aegis::internal {
              (bindDesc.Type == D3D_SIT_UAV_FEEDBACKTEXTURE);
 
        if (isUAV) {
-         if (bindDesc.BindPoint >= static_cast<INT>(rangesPerParam.size())) {
-           rangesPerParam.resize(bindDesc.BindPoint + 1);
-           rootParameters.resize(bindDesc.BindPoint + 1); // keep same indices
+         if (bindDesc.BindPoint >= static_cast<INT>(rootParameters.size())) {
+           rootParameters.resize(bindDesc.BindPoint + 1);
          }
 
-         D3D12_DESCRIPTOR_RANGE1 range = {};
-         range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-         range.NumDescriptors = 1;
-         range.BaseShaderRegister = bindDesc.BindPoint;
-         range.RegisterSpace = bindDesc.Space;
-         range.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_DATA_VOLATILE;
-         range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-         rangesPerParam[bindDesc.BindPoint].push_back(range);
-
          D3D12_ROOT_PARAMETER1 param = {};
-         param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+         param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
          param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+         param.Descriptor.ShaderRegister = bindDesc.BindPoint;
+         param.Descriptor.RegisterSpace = bindDesc.Space;
+         param.Descriptor.Flags = D3D12_ROOT_DESCRIPTOR_FLAG_DATA_VOLATILE;
+
          rootParameters[bindDesc.BindPoint] = param;
        }
+       // TODO: Add support for CBVs (D3D12_ROOT_PARAMETER_TYPE_CBV) etc.
      }
-
-     for (size_t idx = 0; idx < rootParameters.size(); ++idx) {
-       if (rootParameters[idx].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE) {
-         auto const &vec = rangesPerParam[idx];
-         rootParameters[idx].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(vec.size());
-         // vec.data are stable as long we don't mutate the vector.
-         rootParameters[idx].DescriptorTable.pDescriptorRanges = vec.empty() ? nullptr : vec.data();
-       }
-     }
-
 
      D3D12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc = {};
      rootSigDesc.Version = D3D_ROOT_SIGNATURE_VERSION_1_1;

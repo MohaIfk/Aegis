@@ -181,7 +181,7 @@ namespace aegis::internal {
     auto tempReadbackBuffer = m_backend->CreateBuffer(byteSize, GpuMemoryType::READBACK);
     D3D12Buffer* d3dReadbackBuffer = static_cast<D3D12Buffer*>(tempReadbackBuffer.get());
 
-    ResourceCopyBuffer(src, d3dReadbackBuffer);
+    ResourceCopyBuffer(d3dReadbackBuffer, src);
     // TODO: Need to queue this readback.
     // When HostWait() is called, we must map this buffer,
     // copy to destData, and then unmap

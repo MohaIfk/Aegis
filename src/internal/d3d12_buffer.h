@@ -61,7 +61,8 @@ namespace aegis::internal {
     D3D12Backend* m_backend;
     ComPtr<ID3D12Resource> m_resource;
     size_t m_byteSize;
-    void* m_mappedPtr; // Stores the pointer from Map()
+    void* m_mappedPtr;
+    GpuMemoryType m_memoryType;
 
     /** The last known state of this resource. */
     D3D12_RESOURCE_STATES m_currentState;

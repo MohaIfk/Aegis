@@ -29,7 +29,7 @@ namespace aegis::internal {
     }
   }
 
-  D3D12Buffer::D3D12Buffer(D3D12Backend *backend, size_t byteSize, GpuMemoryType type) : m_backend(backend), m_byteSize(byteSize), m_mappedPtr(nullptr) {
+  D3D12Buffer::D3D12Buffer(D3D12Backend *backend, size_t byteSize, GpuMemoryType type) : m_backend(backend), m_byteSize(byteSize), m_mappedPtr(nullptr), m_memoryType(type) {
     auto device = backend->GetDevice();
     auto heapProps = GetHeapProperties(type);
     m_currentState = GetInitialState(type);
@@ -77,15 +77,19 @@ namespace aegis::internal {
       return m_mappedPtr;
     }
     D3D12_RANGE readRange{0, 0};
-    // TODO: If this is a READBACK buffer, set readRange = { 0, m_byteSize };
+    if (m_memoryType == GpuMemoryType::READBACK) {
+      readRange.End = m_byteSize;
+    }
 
-    ThrowIfFailed(m_resource->Map(0, nullptr, &m_mappedPtr));
+    ThrowIfFailed(m_resource->Map(0, &readRange, &m_mappedPtr));
     return m_mappedPtr;
   }
 
   void D3D12Buffer::Unmap() {
     D3D12_RANGE writeRange{0, 0};
-    // TODO: If this is an UPLOAD buffer, specify the written range.
+    if (m_memoryType == GpuMemoryType::UPLOAD) {
+      writeRange.End = m_byteSize;
+    }
 
     m_resource->Unmap(0, &writeRange);
     m_mappedPtr = nullptr;

@@ -134,6 +134,8 @@ namespace aegis::internal {
 
     m_fenceValue++;
 
+    m_inFlightResources.clear();
+
     // TODO: This is where we would process completed readbacks
   }
 
@@ -169,6 +171,8 @@ namespace aegis::internal {
     d3dUploadBuffer->Unmap();
 
     ResourceCopyBuffer(dest, d3dUploadBuffer);
+
+    m_inFlightResources.push_back(std::move(tempUploadBuffer));
     // TODO: Need to keep tempUploadBuffer alive until the copy is done.
   }
 
@@ -181,6 +185,8 @@ namespace aegis::internal {
     // TODO: Need to queue this readback.
     // When HostWait() is called, we must map this buffer,
     // copy to destData, and then unmap
+
+    m_inFlightResources.push_back(std::move(tempReadbackBuffer));
   }
 
 }

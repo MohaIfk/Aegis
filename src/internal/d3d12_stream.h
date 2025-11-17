@@ -81,6 +81,7 @@ namespace aegis::internal {
     bool m_isListOpen;
 
     std::vector<D3D12_RESOURCE_BARRIER> m_pendingBarriers;
+    std::vector<std::unique_ptr<IGpuBuffer>> m_inFlightResources;
 
     // TODO: Need pools for upload and readback buffers
   };

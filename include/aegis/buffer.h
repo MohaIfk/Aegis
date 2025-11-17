@@ -6,6 +6,7 @@
 #pragma once
 
 #include <memory> // for std::unique_ptr
+#include "api.h"
 
 namespace aegis::internal {
   class IGpuBuffer;
@@ -20,12 +21,12 @@ namespace aegis {
    * This is a handle to a GPU resource. It can be used to upload data,
    * download data, and be bound to a ComputeKernel for processing.
    */
-  class GpuBuffer {
+  class AEGIS_API GpuBuffer {
   public:
     /**
      * @brief Destroys the GPU buffer.
      */
-    ~GpuBuffer() = default;
+    ~GpuBuffer();
 
     /**
      * @brief Gets the size of the buffer in bytes.

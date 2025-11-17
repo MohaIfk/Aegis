@@ -2,7 +2,9 @@
 #include "backend.h"
 
 namespace aegis {
-   GpuBuffer::GpuBuffer(ComputeContext *context, std::unique_ptr<internal::IGpuBuffer> backendBuffer) : m_context(context), m_backendBuffer(std::move(backendBuffer)) {}
+  GpuBuffer::GpuBuffer(ComputeContext *context, std::unique_ptr<internal::IGpuBuffer> backendBuffer) : m_context(context), m_backendBuffer(std::move(backendBuffer)) {}
+
+   GpuBuffer::~GpuBuffer() {  }
 
   void *GpuBuffer::Map() {
    return m_backendBuffer->Map();

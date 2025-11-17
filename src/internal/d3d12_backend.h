@@ -23,7 +23,7 @@
 #include <memory> // for std::unique_ptr
 #include <mutex>
 
-#define ThrowIfFailed(hr) if(FAILED(hr)) { throw std::runtime_error("D3D12 HRESULT failed."); }
+#define ThrowIfFailed(hr) if(FAILED(hr)) { throw std::runtime_error(std::string("D3D12 HRESULT failed: ") + #hr); }
 
 using Microsoft::WRL::ComPtr;
 

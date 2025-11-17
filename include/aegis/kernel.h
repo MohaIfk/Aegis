@@ -6,6 +6,7 @@
 #pragma once
 
 #include <memory> // for std::unique_ptr
+#include "api.h"
 
 namespace aegis::internal {
   class IComputeKernel;
@@ -21,12 +22,12 @@ namespace aegis {
    * This is a handle to a compiled kernel. It is created by
    * ComputeContext::CreateKernel and is bound to a ComputeStream to be run.
    */
-  class ComputeKernel {
+  class AEGIS_API ComputeKernel {
   public:
     /**
      * @brief Destroys the compute kernel.
      */
-    ~ComputeKernel() = default;
+    ~ComputeKernel();
 
     /**
      * @brief Gets the internal backend implementation.

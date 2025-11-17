@@ -6,6 +6,7 @@
 #pragma once
 
 #include <memory> // for std::unique_ptr
+#include "api.h"
 
 namespace aegis::internal {
   class IComputeStream;
@@ -24,7 +25,7 @@ namespace aegis {
    * (like dispatching kernels or copying data) into the stream,
    * and then submit the stream to the GPU for execution.
    */
-  class ComputeStream {
+  class AEGIS_API ComputeStream {
   public:
     /**
      * @brief Destroys the stream.

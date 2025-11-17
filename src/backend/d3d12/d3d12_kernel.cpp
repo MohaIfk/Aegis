@@ -77,9 +77,15 @@ namespace aegis::internal {
        nullptr
      ));
 
+
+     DxcBuffer shaderBuffer;
+     shaderBuffer.Ptr = shaderBytecode->GetBufferPointer();
+     shaderBuffer.Size = shaderBytecode->GetBufferSize();
+     shaderBuffer.Encoding = 0;
+
      ComPtr<ID3D12ShaderReflection> reflection;
      ThrowIfFailed(utils->CreateReflection(
-       reinterpret_cast<const DxcBuffer *>(shaderBytecode.Get()),
+       &shaderBuffer,
        IID_PPV_ARGS(&reflection)
      ));
 

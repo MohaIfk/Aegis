@@ -7,7 +7,7 @@
 namespace aegis {
   ComputeStream::ComputeStream(ComputeContext *context, std::unique_ptr<internal::IComputeStream> backendStream) : m_context(context), m_backendStream(std::move(backendStream)) {}
 
-  ComputeStream::~ComputeStream() {}
+  ComputeStream::~ComputeStream() = default;
 
   void ComputeStream::RecordDispatch(ComputeKernel &kernel, uint32_t threadGroupsX, uint32_t threadGroupsY,
                                      uint32_t threadGroupsZ) {
@@ -28,6 +28,13 @@ namespace aegis {
   }
 
   void ComputeStream::SetBuffer(uint32_t slot, GpuBuffer &buffer) {
+    // Note: We're not setting the kernel here, just the buffer.
+    // The D3D12Stream implementation will need to handle this.
+    // Our 'RecordDispatch' also sets the kernel, which is simple
+    // but less flexible. A better design might be:
+    //   stream.SetKernel(kernel);
+    //   stream.SetBuffer(0, bufferA);
+    //   stream.RecordDispatch(1,1,1);
     m_backendStream->SetBuffer(slot, buffer.GetBackendBuffer());
   }
 

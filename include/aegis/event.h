@@ -6,6 +6,7 @@
 #pragma once
 
 #include <memory> // for std::unique_ptr
+#include "api.h"
 
 namespace aegis::internal {
   class IComputeEvent;
@@ -21,12 +22,12 @@ namespace aegis {
    * stream or by the host (CPU). This is the primary tool for
    * managing asynchronous execution.
    */
-  class ComputeEvent {
+  class AEGIS_API ComputeEvent {
   public:
     /**
      * @brief Destroys the event.
      */
-    ~ComputeEvent() = default;
+    ~ComputeEvent();
 
     /**
      * @brief Gets the internal backend implementation.

@@ -10,7 +10,7 @@ option(AEGIS_BUILD_BACKEND_D3D121 "Enable the Direct3D 12 backend" ON)
 option(AEGIS_BUILD_BACKEND_VULKAN "Enable the Vulkan backend" OFF)
 
 option(BUILD_SHARED_LIBS "Build the 'Aegis' as a shared library" ON)
-
+option(AEGIS_BUILD_EXAMPLES "Build the 'Aegis' examples" ON)
 option(AEGIS_BUILD_TEST "Build the 'Aegis' unit tests" OFF)
 
 find_program(AEGIS_DXC_EXECUTABLE
@@ -28,4 +28,6 @@ if (AEGIS_BUILD_TEST)
     add_subdirectory(tests)
 endif ()
 
-# add_executable(aegis main.cpp)
+if(AEGIS_BUILD_EXAMPLES)
+endif()
+add_subdirectory(examples)

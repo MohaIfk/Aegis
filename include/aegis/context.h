@@ -7,22 +7,18 @@
 #include <string>
 #include <memory> // for std::unique_ptr
 
+#include "api.h"
 #include "aegis/buffer.h"
 #include "aegis/kernel.h"
-
-namespace aegis {
-  class ComputeStream;
-  class GpuBuffer;
-  class ComputeKernel;
-  class ComputeEvent;
-}
+#include "aegis/event.h"
+#include "aegis/stream.h"
 
 namespace aegis::internal {
   class IComputeBackend;
 }
 
 namespace aegis {
-  class ComputeContext {
+  class AEGIS_API ComputeContext {
   public:
     /**
      * @brief Destroys the compute context and all associated resources.

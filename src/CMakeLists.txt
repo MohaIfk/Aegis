@@ -1,10 +1,16 @@
 set(AEGIS_CORE_SOURCE
         aegis_context.cpp
+        aegis_buffer.cpp
+        aegis_kernel.cpp
+        aegis_event.cpp
+        aegis_stream.cpp
 )
 
 add_library(Aegis ${AEGIS_CORE_SOURCE})
 
-# target_sources(Aegis PRIVATE ${AEGIS_CORE_SOURCE})
+if (BUILD_SHARED_LIBS)
+    target_compile_definitions(Aegis PRIVATE AEGIS_BUILD_DLL)
+endif ( )
 
 target_include_directories(Aegis
         PUBLIC
@@ -20,6 +26,11 @@ if (AEGIS_BUILD_BACKEND_D3D121)
     target_compile_definitions(Aegis PRIVATE AEGIS_ENABLE_D3D12)
 
     set(AEGIS_D3D12_SOURCES
+            backend/d3d12/d3d12_backend.cpp
+            backend/d3d12/d3d12_buffer.cpp
+            backend/d3d12/d3d12_kernel.cpp
+            backend/d3d12/d3d12_event.cpp
+            backend/d3d12/d3d12_stream.cpp
     )
 
     target_sources(Aegis PRIVATE ${AEGIS_D3D12_SOURCES})
